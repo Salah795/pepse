@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Terrain {
+    public static final float TERRAIN_FACTOR = (float) 2 / 3;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
 
@@ -17,7 +18,7 @@ public class Terrain {
 
     public Terrain(Vector2 windowDimensions, int seed) {
         this.windowDimensions = new Vector2(windowDimensions);
-        this.groundHeightAtX0 = windowDimensions.y() * ((float) 2 / 3);
+        this.groundHeightAtX0 = windowDimensions.y() * TERRAIN_FACTOR;
     }
 
     public float groundHeightAt(float x) { return this.groundHeightAtX0; }

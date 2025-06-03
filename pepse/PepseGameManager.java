@@ -12,6 +12,7 @@ import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
 import pepse.world.daynight.Night;
+import pepse.world.daynight.Sun;
 
 import java.util.List;
 
@@ -36,5 +37,7 @@ public class PepseGameManager extends GameManager {
         GameObject night = Night.create(windowController.getWindowDimensions(), 30);
         //TODO check if the layer should really be UI.
         gameObjects().addGameObject(night, Layer.UI);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(), 0);
+        gameObjects().addGameObject(sun, Layer.BACKGROUND);
     }
 }
