@@ -3,6 +3,7 @@ package pepse;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
+import danogl.components.Transition;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
@@ -10,6 +11,7 @@ import danogl.gui.WindowController;
 import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
+import pepse.world.daynight.Night;
 
 import java.util.List;
 
@@ -31,5 +33,8 @@ public class PepseGameManager extends GameManager {
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
+        GameObject night = Night.create(windowController.getWindowDimensions(), 30);
+        //TODO check if the layer should really be UI.
+        gameObjects().addGameObject(night, Layer.UI);
     }
 }
