@@ -13,6 +13,7 @@ import pepse.world.Sky;
 import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
+import pepse.world.daynight.SunHalo;
 
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class PepseGameManager extends GameManager {
         //TODO check if the layer should really be UI.
         gameObjects().addGameObject(night, Layer.UI);
         GameObject sun = Sun.create(windowController.getWindowDimensions(), 30);
+        GameObject sunHalo = SunHalo.create(sun);
+        //TODO check if the layer should really be BACKGROUND.
+        gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
         //TODO check if the layer should really be BACKGROUND.
         gameObjects().addGameObject(sun, Layer.BACKGROUND);
     }
