@@ -15,7 +15,7 @@ public class Sun {
     public static GameObject create(Vector2 windowDimensions, float cycleLength) {
         float sunHeight = windowDimensions.y() * Terrain.TERRAIN_FACTOR * 0.5f;
         Vector2 initialSunCenter = new Vector2((float) (windowDimensions.x() * 0.5), sunHeight);
-        GameObject sun = new GameObject(initialSunCenter, new Vector2(SUN_RADIUS, SUN_RADIUS),
+        GameObject sun = new GameObject(initialSunCenter, Vector2.ONES.mult(SUN_RADIUS),
                 new OvalRenderable(Color.YELLOW));
         sun.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         sun.setTag("sun");
