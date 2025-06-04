@@ -19,7 +19,9 @@ import pepse.world.daynight.SunHalo;
 import java.util.List;
 
 public class PepseGameManager extends GameManager {
+    public static final float DIMENSION_MIDDLE = 0.5f;
     private static final int CYCLE_LENGTH = 30;
+    private static final int TERRAIN_MIN_RANGE = 0;
 
     public static void main(String[] args) {
         new PepseGameManager().run();
@@ -34,7 +36,8 @@ public class PepseGameManager extends GameManager {
         GameObject sky = Sky.create(windowController.getWindowDimensions());
         gameObjects().addGameObject(sky, Layer.BACKGROUND);
         Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
-        List<Block> blocks = terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
+        List<Block> blocks = terrain.createInRange(TERRAIN_MIN_RANGE,
+                (int) windowController.getWindowDimensions().x());
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
@@ -43,7 +46,7 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(night, Layer.UI);
         GameObject sun = Sun.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
         GameObject sunHalo = SunHalo.create(sun);
-        float avatarXCoordinate = windowController.getWindowDimensions().x() / 2;
+        float avatarXCoordinate = windowController.getWindowDimensions().x() * DIMENSION_MIDDLE;
         Avatar avatar = new Avatar(new Vector2(avatarXCoordinate,
                 terrain.groundHeightAt(avatarXCoordinate) - Avatar.AVATAR_SIZE),
                 inputListener, imageReader);
