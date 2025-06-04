@@ -23,6 +23,7 @@ public class Terrain {
 
     public float groundHeightAt(float x) { return this.groundHeightAtX0; }
 
+    //TODO fix the implementation of this method. (you have been cheated it from Untitled1)
     public List<Block> createInRange(int minX, int maxX) {
         List<Block> blocks = new ArrayList<>();
         RectangleRenderable renderable = new RectangleRenderable(
