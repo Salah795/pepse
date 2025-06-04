@@ -37,7 +37,7 @@ public class PepseGameManager extends GameManager {
         GameObject night = Night.create(windowController.getWindowDimensions(), 30);
         //TODO check if the layer should really be UI.
         gameObjects().addGameObject(night, Layer.UI);
-        GameObject sun = Sun.create(windowController.getWindowDimensions(), 0);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(), 30);
         //TODO check if the layer should really be BACKGROUND.
         gameObjects().addGameObject(sun, Layer.BACKGROUND);
     }
