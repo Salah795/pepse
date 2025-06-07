@@ -35,29 +35,37 @@ public class Avatar extends GameObject {
         this.energyConsumer = energyUpdater;
     }
 
+    public void addEnergy(float energy) {
+        this.avatarEnergy += energy;
+        this.energyConsumer.accept((int) this.avatarEnergy);
+    }
+
     @Override
     public void update(float deltaTime) {
-        //TODO fix the implementation of this function.
         super.update(deltaTime);
         float xVel = 0;
-        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT) && this.avatarEnergy >= RUN_STATE_MODIFIER)
+        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT) && this.avatarEnergy >= RUN_STATE_MODIFIER) {
             xVel -= VELOCITY_X;
-        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)&& this.avatarEnergy >= RUN_STATE_MODIFIER)
+        }
+        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT) && this.avatarEnergy >= RUN_STATE_MODIFIER) {
             xVel += VELOCITY_X;
+        }
         if(xVel != 0) {
-            this.avatarEnergy -= RUN_STATE_MODIFIER;
-            this.energyConsumer.accept((int) this.avatarEnergy);
+            updateEnergy(-RUN_STATE_MODIFIER);
         }
         transform().setVelocityX(xVel);
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0 &&
                 this.avatarEnergy >= JUMP_STATE_MODIFIER) {
             transform().setVelocityY(VELOCITY_Y);
-            this.avatarEnergy -= JUMP_STATE_MODIFIER;
-            this.energyConsumer.accept((int) this.avatarEnergy);
+            updateEnergy(-JUMP_STATE_MODIFIER);
         }
         if(getVelocity().equals(Vector2.ZERO) && this.avatarEnergy <= AVATAR_INITIAL_ENERGY - 1) {
-            this.avatarEnergy += IDLE_STATE_MODIFIER;
-            this.energyConsumer.accept((int) this.avatarEnergy);
+            updateEnergy(IDLE_STATE_MODIFIER);
         }
+    }
+
+    private void updateEnergy(float value) {
+        this.avatarEnergy += value;
+        this.energyConsumer.accept((int) this.avatarEnergy);
     }
 }

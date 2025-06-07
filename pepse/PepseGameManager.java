@@ -20,6 +20,12 @@ public class PepseGameManager extends GameManager {
     private static final int CYCLE_LENGTH = 30;
     private static final int TERRAIN_MIN_RANGE = 0;
 
+    private WindowController windowController;
+    private UserInputListener inputListener;
+    private ImageReader imageReader;
+    private Terrain terrain;
+    private GameObject sun;
+
     public static void main(String[] args) {
         new PepseGameManager().run();
     }
@@ -30,29 +36,65 @@ public class PepseGameManager extends GameManager {
                                UserInputListener inputListener,
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+        this.windowController = windowController;
+        this.inputListener = inputListener;
+        this.imageReader = imageReader;
+
+        createSky();
+
+        createTerrain();
+
+        createNight();
+
+        createSun();
+
+        createSunHalo();
+
+        createAvatar();
+
+        createEnergyCounter();
+
+    }
+
+    private void createSky() {
         GameObject sky = Sky.create(windowController.getWindowDimensions());
         gameObjects().addGameObject(sky, Layer.BACKGROUND);
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
+    }
+
+    private void createTerrain() {
+        this.terrain = new Terrain(windowController.getWindowDimensions(), 0);
         List<Block> blocks = terrain.createInRange(TERRAIN_MIN_RANGE,
                 (int) windowController.getWindowDimensions().x());
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
+    }
+
+    private void createNight() {
         GameObject night = Night.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
-        //TODO check if the layer should really be UI.
         gameObjects().addGameObject(night, Layer.UI);
-        GameObject sun = Sun.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
-        GameObject sunHalo = SunHalo.create(sun);
+    }
+
+    private void createAvatar() {
         float avatarXCoordinate = windowController.getWindowDimensions().x() * DIMENSION_MIDDLE;
-        GameObject energyCounter = EnergyCounter.create(windowController.getWindowDimensions());
         Avatar avatar = new Avatar(new Vector2(avatarXCoordinate,
                 terrain.groundHeightAt(avatarXCoordinate) - Avatar.AVATAR_SIZE),
                 inputListener, imageReader, EnergyCounter::update);
-        gameObjects().addGameObject(energyCounter, Layer.UI);
         gameObjects().addGameObject(avatar);
-        //TODO check if the layer should really be BACKGROUND.
-        gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
-        //TODO check if the layer should really be BACKGROUND.
+    }
+
+    private void createEnergyCounter() {
+        GameObject energyCounter = EnergyCounter.create(windowController.getWindowDimensions());
+        gameObjects().addGameObject(energyCounter, Layer.UI);
+    }
+
+    private void createSun() {
+        this.sun = Sun.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
         gameObjects().addGameObject(sun, Layer.BACKGROUND);
+    }
+
+    private void createSunHalo() {
+        GameObject sunHalo = SunHalo.create(this.sun);
+        gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
     }
 }
