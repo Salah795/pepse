@@ -9,13 +9,13 @@ import java.awt.event.KeyEvent;
 
 public class Avatar extends GameObject {
     public static final int AVATAR_SIZE = 50;
+    public static final float AVATAR_INITIAL_ENERGY = 100;
     private static final float IDLE_STATE_MODIFIER = 1;
     private static final float RUN_STATE_MODIFIER = 0.5f;
     private static final float JUMP_STATE_MODIFIER = 10;
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
-    private static final float AVATAR_INITIAL_ENERGY = 100;
     private static final String AVATAR_IMAGE_PATH = "assets/idle_0.png";
 
     private float avatarEnergy;
@@ -28,6 +28,10 @@ public class Avatar extends GameObject {
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
         this.avatarEnergy = AVATAR_INITIAL_ENERGY;
+    }
+
+    public float getEnergy() {
+        return this.avatarEnergy;
     }
 
     @Override
