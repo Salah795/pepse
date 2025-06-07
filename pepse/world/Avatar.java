@@ -6,6 +6,7 @@ import danogl.gui.UserInputListener;
 import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 public class Avatar extends GameObject {
     public static final int AVATAR_SIZE = 50;
@@ -18,20 +19,20 @@ public class Avatar extends GameObject {
     private static final float GRAVITY = 600;
     private static final String AVATAR_IMAGE_PATH = "assets/idle_0.png";
 
-    private float avatarEnergy;
+    private final Consumer<Integer> energyConsumer;
     private final UserInputListener inputListener;
+    private float avatarEnergy;
 
-    public Avatar(Vector2 topLeftCorner, UserInputListener inputListener, ImageReader imageReader) {
+    public Avatar(Vector2 topLeftCorner, UserInputListener inputListener, ImageReader imageReader,
+                  Consumer<Integer> energyUpdater) {
+        //TODO check if you could change the signature of this method.
         super(topLeftCorner, Vector2.ONES.mult(AVATAR_SIZE), imageReader.readImage(
                 AVATAR_IMAGE_PATH, true));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
         this.avatarEnergy = AVATAR_INITIAL_ENERGY;
-    }
-
-    public float getEnergy() {
-        return this.avatarEnergy;
+        this.energyConsumer = energyUpdater;
     }
 
     @Override
@@ -43,16 +44,20 @@ public class Avatar extends GameObject {
             xVel -= VELOCITY_X;
         if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)&& this.avatarEnergy >= RUN_STATE_MODIFIER)
             xVel += VELOCITY_X;
-        if(xVel != 0)
+        if(xVel != 0) {
             this.avatarEnergy -= RUN_STATE_MODIFIER;
+            this.energyConsumer.accept((int) this.avatarEnergy);
+        }
         transform().setVelocityX(xVel);
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0 &&
                 this.avatarEnergy >= JUMP_STATE_MODIFIER) {
             transform().setVelocityY(VELOCITY_Y);
             this.avatarEnergy -= JUMP_STATE_MODIFIER;
+            this.energyConsumer.accept((int) this.avatarEnergy);
         }
-        if(getVelocity().equals(Vector2.ZERO) && this.avatarEnergy < AVATAR_INITIAL_ENERGY) {
+        if(getVelocity().equals(Vector2.ZERO) && this.avatarEnergy <= AVATAR_INITIAL_ENERGY - 1) {
             this.avatarEnergy += IDLE_STATE_MODIFIER;
+            this.energyConsumer.accept((int) this.avatarEnergy);
         }
     }
 }
