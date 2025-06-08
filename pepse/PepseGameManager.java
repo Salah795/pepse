@@ -7,6 +7,7 @@ import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
+import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
 import pepse.world.*;
 import pepse.world.daynight.Night;
@@ -19,12 +20,15 @@ public class PepseGameManager extends GameManager {
     public static final float DIMENSION_MIDDLE = 0.5f;
     private static final int CYCLE_LENGTH = 30;
     private static final int TERRAIN_MIN_RANGE = 0;
+    private static final int ENERGY_COUNTER_SIZE = 50;
+    private static final int DISTANCE_FROM_TOP = 10;
 
     private WindowController windowController;
     private UserInputListener inputListener;
     private ImageReader imageReader;
     private Terrain terrain;
     private GameObject sun;
+    private Avatar avatar;
 
     public static void main(String[] args) {
         new PepseGameManager().run();
@@ -77,14 +81,20 @@ public class PepseGameManager extends GameManager {
 
     private void createAvatar() {
         float avatarXCoordinate = windowController.getWindowDimensions().x() * DIMENSION_MIDDLE;
-        Avatar avatar = new Avatar(new Vector2(avatarXCoordinate,
+        this.avatar = new Avatar(new Vector2(avatarXCoordinate,
                 terrain.groundHeightAt(avatarXCoordinate) - Avatar.AVATAR_SIZE),
-                inputListener, imageReader, EnergyCounter::update);
+                inputListener, imageReader);
         gameObjects().addGameObject(avatar);
     }
 
     private void createEnergyCounter() {
-        GameObject energyCounter = EnergyCounter.create(windowController.getWindowDimensions());
+        TextRenderable energyCounterRender = new TextRenderable(
+                Avatar.AVATAR_INITIAL_ENERGY + EnergyCounter.PERCENT_SIGN);
+        Vector2 energyCounterLeftCorner = new Vector2(
+                windowController.getWindowDimensions().x() * PepseGameManager.DIMENSION_MIDDLE -
+                        ENERGY_COUNTER_SIZE, DISTANCE_FROM_TOP);
+        EnergyCounter energyCounter = new EnergyCounter(energyCounterLeftCorner,
+                Vector2.ONES.mult(ENERGY_COUNTER_SIZE), energyCounterRender, this.avatar::getEnergy);
         gameObjects().addGameObject(energyCounter, Layer.UI);
     }
 

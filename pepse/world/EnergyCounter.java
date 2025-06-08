@@ -1,31 +1,36 @@
 package pepse.world;
 
 import danogl.GameObject;
-import danogl.components.CoordinateSpace;
 import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
-import pepse.PepseGameManager;
 
-public class EnergyCounter {
-    private static final int ENERGY_COUNTER_SIZE = 50;
-    private static final int DISTANCE_FROM_TOP = 10;
-    private static final String PERCENT_SIGN = "%";
-    private static final String ENERGY_COUNTER_TAG = "EnergyCounter";
-    private static final TextRenderable energyCounterRender = new TextRenderable(
-            (int) Avatar.AVATAR_INITIAL_ENERGY + PERCENT_SIGN);
+import java.util.function.Supplier;
 
-    public static GameObject create(Vector2 windowDimensions) {
-        Vector2 energyCounterLeftCorner = new Vector2(
-                windowDimensions.x() * PepseGameManager.DIMENSION_MIDDLE -
-                        ENERGY_COUNTER_SIZE, DISTANCE_FROM_TOP);
-        GameObject energyCounter = new GameObject(energyCounterLeftCorner,
-                Vector2.ONES.mult(ENERGY_COUNTER_SIZE), energyCounterRender);
-        energyCounter.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
-        energyCounter.setTag(ENERGY_COUNTER_TAG);
-        return energyCounter;
+public class EnergyCounter extends GameObject {
+    public static String PERCENT_SIGN = "%";
+
+    private final Supplier<Integer> avatarEnergySupplier;
+    private final TextRenderable textRenderable;
+
+    /**
+     * Construct a new GameObject instance.
+     *
+     * @param topLeftCorner Position of the object, in window coordinates (pixels).
+     *                      Note that (0,0) is the top-left corner of the window.
+     * @param dimensions    Width and height in window coordinates.
+     * @param textRenderable    The textRenderable representing the object. Can be null, in which case
+     *                      the GameObject will not be rendered.
+     */
+    public EnergyCounter(Vector2 topLeftCorner, Vector2 dimensions, TextRenderable textRenderable,
+                         Supplier<Integer> avatarEnergySupplier) {
+        super(topLeftCorner, dimensions, textRenderable);
+        this.avatarEnergySupplier = avatarEnergySupplier;
+        this.textRenderable = textRenderable;
     }
 
-    public static void update(int newEnergy) {
-        energyCounterRender.setString(newEnergy + PERCENT_SIGN);
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        this.textRenderable.setString(this.avatarEnergySupplier.get().toString() + PERCENT_SIGN);
     }
 }
