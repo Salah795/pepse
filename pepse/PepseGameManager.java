@@ -105,6 +105,6 @@ public class PepseGameManager extends GameManager {
 
     private void createSunHalo() {
         GameObject sunHalo = SunHalo.create(this.sun);
-        gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
+        gameObjects().addGameObject(sunHalo,Layer.BACKGROUND);
     }
 }
