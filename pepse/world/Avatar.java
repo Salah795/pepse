@@ -65,7 +65,7 @@ public class Avatar extends GameObject {
         float xVel = 0;
         if(inputListener.isKeyPressed(KeyEvent.VK_LEFT) && this.avatarEnergy >= RUN_STATE_MODIFIER)
             xVel -= VELOCITY_X;
-        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)&& this.avatarEnergy >= RUN_STATE_MODIFIER)
+        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT) && this.avatarEnergy >= RUN_STATE_MODIFIER)
             xVel += VELOCITY_X;
         if(xVel != 0) {
             this.avatarEnergy -= RUN_STATE_MODIFIER;
