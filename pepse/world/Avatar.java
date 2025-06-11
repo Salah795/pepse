@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Avatar extends GameObject {
+    //TODO implement the point 6.7
     public static final int AVATAR_SIZE = 50;
     public static final float AVATAR_INITIAL_ENERGY = 100;
     private static final int IDLE_IMAGES_NUMBER = 4;
