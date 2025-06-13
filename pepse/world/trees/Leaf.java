@@ -1,9 +1,11 @@
 package pepse.world.trees;
 
 import danogl.GameObject;
+import danogl.components.ScheduledTask;
 import danogl.components.Transition;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import java.util.Random;
 
 public class Leaf extends GameObject {
     //TODO return here again and try to change the implementation here because you have been cheated this.
@@ -12,6 +14,9 @@ public class Leaf extends GameObject {
     private static final float TRANSITION_TIME = 2;
     private static final float MIN_PORTION = 0.5f;
     private static final float MAX_PORTION = 1.5f;
+    private static final float DELAY_FACTOR = 0.1f;
+    private static final int DELAY_TIME = 30;
+    private static final String LEAF_TAG = "leaf";
 
     /**
      * Construct a new GameObject instance.
@@ -23,19 +28,19 @@ public class Leaf extends GameObject {
      */
     public Leaf(Vector2 topLeftCorner, Renderable renderable) {
         super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);
-        createAngleTransition();
-        createWidthTransition();
+        Random random = new Random();
+        float delayTime = random.nextInt(DELAY_TIME) * DELAY_FACTOR;
+        new ScheduledTask(this, delayTime, false, this::createTransition);
+        setTag(LEAF_TAG);
     }
 
-    private void createAngleTransition() {
+    private void createTransition() {
         new Transition<>(
                 this, this.renderer()::setRenderableAngle, VELOCITY_ANGLE,
                 -VELOCITY_ANGLE, Transition.LINEAR_INTERPOLATOR_FLOAT, TRANSITION_TIME,
                 Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null
         );
-    }
 
-    private void createWidthTransition() {
         new Transition<>(
                 this, this::setDimensions, getDimensions().mult(MIN_PORTION),
                 getDimensions().mult(MAX_PORTION), Transition.LINEAR_INTERPOLATOR_VECTOR, TRANSITION_TIME,
