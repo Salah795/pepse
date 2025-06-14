@@ -18,7 +18,7 @@ import java.util.List;
 
 public class PepseGameManager extends GameManager {
     public static final float DIMENSION_MIDDLE = 0.5f;
-    private static final int CYCLE_LENGTH = 30;
+    public static final int CYCLE_LENGTH = 30;
     private static final int TERRAIN_MIN_RANGE = 0;
     private static final int ENERGY_COUNTER_SIZE = 50;
     private static final int DISTANCE_FROM_TOP = 10;

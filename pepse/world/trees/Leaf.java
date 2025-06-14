@@ -3,13 +3,16 @@ package pepse.world.trees;
 import danogl.GameObject;
 import danogl.components.ScheduledTask;
 import danogl.components.Transition;
+import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+
+import java.awt.*;
 import java.util.Random;
 
 public class Leaf extends GameObject {
     //TODO return here again and try to change the implementation here because you have been cheated this.
-    private static final int SIZE = 20;
+    public static final int SIZE = 20;
     private static final float VELOCITY_ANGLE = 12;
     private static final float TRANSITION_TIME = 2;
     private static final float MIN_PORTION = 0.5f;
@@ -23,11 +26,9 @@ public class Leaf extends GameObject {
      *
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.
-     * @param renderable    The renderable representing the object. Can be null, in which case
-     *                      the GameObject will not be rendered.
      */
-    public Leaf(Vector2 topLeftCorner, Renderable renderable) {
-        super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);
+    public Leaf(Vector2 topLeftCorner) {
+        super(topLeftCorner, Vector2.ONES.mult(SIZE), new RectangleRenderable(Color.GREEN));
         Random random = new Random();
         float delayTime = random.nextInt(DELAY_TIME) * DELAY_FACTOR;
         new ScheduledTask(this, delayTime, false, this::createTransition);
