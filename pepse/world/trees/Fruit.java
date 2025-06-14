@@ -35,6 +35,7 @@ public class Fruit extends GameObject {
      */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
+        //TODO fix this method because you have been copied it.
         super.onCollisionEnter(other, collision);
         if (other.getTag().equals(Avatar.AVATAR_TAG) && renderer().getRenderable() != null) {
             this.renderer().setRenderable(null);
