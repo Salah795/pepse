@@ -8,10 +8,11 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.PepseGameManager;
 import pepse.world.Avatar;
+import pepse.world.JumpObserver;
 
 import java.awt.*;
 
-public class Fruit extends GameObject {
+public class Fruit extends GameObject implements JumpObserver {
     private static final String FRUIT_TAG = "fruit";
     private static final int FRUIT_ENERGY = 10;
 
@@ -43,5 +44,10 @@ public class Fruit extends GameObject {
                     () -> this.renderer().setRenderable(new OvalRenderable(Color.YELLOW)));
             ((Avatar)other).addEnergy(FRUIT_ENERGY);
         }
+    }
+
+    @Override
+    public void updateForJump() {
+
     }
 }

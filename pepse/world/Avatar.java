@@ -8,6 +8,8 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Avatar extends GameObject {
     //TODO implement the point 6.7
@@ -35,6 +37,7 @@ public class Avatar extends GameObject {
     private AnimationRenderable idleRenderables;
     private AnimationRenderable jumpRenderables;
     private AnimationRenderable runRenderables;
+    private final List<JumpObserver> jumpObservers;
 
     public Avatar(Vector2 topLeftCorner, UserInputListener inputListener, ImageReader imageReader) {
         super(topLeftCorner, Vector2.ONES.mult(AVATAR_SIZE), imageReader.readImage(
@@ -44,6 +47,7 @@ public class Avatar extends GameObject {
         this.inputListener = inputListener;
         this.imageReader = imageReader;
         this.avatarEnergy = AVATAR_INITIAL_ENERGY;
+        jumpObservers = new ArrayList<>();
         createIdleRenderable();
         createJumpRenderable();
         createRunRenderable();
@@ -79,13 +83,24 @@ public class Avatar extends GameObject {
         transform().setVelocityX(xVel);
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0 &&
                 this.avatarEnergy >= JUMP_STATE_MODIFIER) {
-            transform().setVelocityY(VELOCITY_Y);
-            this.avatarEnergy -= JUMP_STATE_MODIFIER;
-            renderer().setRenderable(jumpRenderables);
+            jumpAvatar();
         }
         if(getVelocity().equals(Vector2.ZERO) && this.avatarEnergy < AVATAR_INITIAL_ENERGY) {
             this.avatarEnergy += IDLE_STATE_MODIFIER;
             renderer().setRenderable(idleRenderables);
+        }
+    }
+
+    public void registerObserverToJump(JumpObserver jumpObserver) {
+        this.jumpObservers.add(jumpObserver);
+    }
+
+    public void jumpAvatar() {
+        transform().setVelocityY(VELOCITY_Y);
+        this.avatarEnergy -= JUMP_STATE_MODIFIER;
+        renderer().setRenderable(jumpRenderables);
+        for (JumpObserver jumpObserver : jumpObservers) {
+            jumpObserver.updateForJump();
         }
     }
 

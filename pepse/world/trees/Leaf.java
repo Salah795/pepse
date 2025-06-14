@@ -6,11 +6,12 @@ import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import pepse.world.JumpObserver;
 
 import java.awt.*;
 import java.util.Random;
 
-public class Leaf extends GameObject {
+public class Leaf extends GameObject implements JumpObserver {
     //TODO return here again and try to change the implementation here because you have been cheated this.
     public static final int SIZE = 20;
     private static final float VELOCITY_ANGLE = 12;
@@ -47,5 +48,11 @@ public class Leaf extends GameObject {
                 getDimensions().mult(MAX_PORTION), Transition.LINEAR_INTERPOLATOR_VECTOR, TRANSITION_TIME,
                 Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null
         );
+    }
+
+    @Override
+    public void updateForJump() {
+        new Transition<>(this,
+                );
     }
 }
