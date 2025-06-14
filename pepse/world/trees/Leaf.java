@@ -4,7 +4,6 @@ import danogl.GameObject;
 import danogl.components.ScheduledTask;
 import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
-import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.world.JumpObserver;
 
@@ -21,6 +20,8 @@ public class Leaf extends GameObject implements JumpObserver {
     private static final float DELAY_FACTOR = 0.1f;
     private static final int DELAY_TIME = 30;
     private static final String LEAF_TAG = "leaf";
+    public static final float LEAVES_TRANSITION_START = 90;
+    public static final float LEAVES_TRANSITION_END = 0;
 
     /**
      * Construct a new GameObject instance.
@@ -52,7 +53,14 @@ public class Leaf extends GameObject implements JumpObserver {
 
     @Override
     public void updateForJump() {
+        //TODO fix this implementation because you copied it.
         new Transition<>(this,
-                );
+                this.renderer()::setRenderableAngle,
+                LEAVES_TRANSITION_START,
+                LEAVES_TRANSITION_END,
+                Transition.LINEAR_INTERPOLATOR_FLOAT,
+                TRANSITION_TIME,
+                Transition.TransitionType.TRANSITION_ONCE,
+                null);
     }
 }
