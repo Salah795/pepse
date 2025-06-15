@@ -6,6 +6,7 @@ import danogl.collisions.Layer;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import pepse.PepseGameManager;
 import pepse.util.ColorSupplier;
 import pepse.world.Block;
 import pepse.world.JumpObserver;
@@ -22,6 +23,12 @@ import java.util.function.Function;
  * them to the game.
  */
 public class Flora {
+    //TODO the implementation of this class need to be fixed because you copied it.
+    private static final float ADD_TREE_PROBABILITY = 0.9f;
+    private static final double FRUIT_ADD_PROBABILITY = 0.9f;
+    private static final double LEAVES_ADD_PROBABILITY = 0.2f;
+    private static final int LEAVES_IN_ROW = 2;
+    private static final int LEAVES_IN_COL = 1;
 
     private final Function<Float, Float> groundHeightFunc; // Function to calculate ground height
     private final Consumer<JumpObserver> jumpingOverObjectsConsumer; // Handles jumpable objects
@@ -79,7 +86,7 @@ public class Flora {
      * @return True if the x-coordinate matches the avatar's position, false otherwise.
      */
     private boolean isAvatarPosition(int x) {
-        return x == Constants.AVATAR_X_COORDINATE;
+        return x == PepseGameManager.avatarInitialX;
     }
 
     /**
@@ -88,7 +95,7 @@ public class Flora {
      * @return True if a tree should be added, false otherwise.
      */
     private boolean shouldAddTree() {
-        return random.nextFloat() > Constants.ADD_TREE_PROBABILITY;
+        return random.nextFloat() > ADD_TREE_PROBABILITY;
     }
 
     /**
@@ -124,10 +131,10 @@ public class Flora {
      */
     private List<GameObject> createFruitsAndLeaves(int x, int height) {
         List<GameObject> fruitsAndLeaves = new ArrayList<>();
-        int minX = x - Block.SIZE * Constants.LEAVES_IN_ROW;
-        int maxX = x + Block.SIZE * Constants.LEAVES_IN_ROW;
-        int minY = (int) (height - Leaf.SIZE * Constants.LEAVES_IN_COL);
-        int maxY = (int) (height + Leaf.SIZE * Constants.LEAVES_IN_COL);
+        int minX = x - Block.SIZE * LEAVES_IN_ROW;
+        int maxX = x + Block.SIZE * LEAVES_IN_ROW;
+        int minY = height - Leaf.SIZE * LEAVES_IN_COL;
+        int maxY = height + Leaf.SIZE * LEAVES_IN_COL;
 
         for (int row = minX; row <= maxX; row += Leaf.SIZE) {
             for (int col = minY; col <= maxY; col += Leaf.SIZE) {
@@ -146,7 +153,7 @@ public class Flora {
      * @param col The column position of the leaf.
      */
     private void addLeafIfNeeded(List<GameObject> list, int row, int col) {
-        if (random.nextFloat() >= Constants.LEAVES_ADD_PROBABILITY) {
+        if (random.nextFloat() >= LEAVES_ADD_PROBABILITY) {
             Vector2 location = calculateObjectLocation(row, col, Leaf.SIZE);
             Leaf leaf = new Leaf(location);
             list.add(leaf);
@@ -162,7 +169,7 @@ public class Flora {
      * @param col The column position of the fruit.
      */
     private void addFruitIfNeeded(List<GameObject> list, int row, int col) {
-        if (random.nextFloat() >= Constants.FRUIT_ADD_PROBABILITY) {
+        if (random.nextFloat() >= FRUIT_ADD_PROBABILITY) {
             Vector2 location = calculateObjectLocation(row, col, Leaf.SIZE);
             Fruit fruit = new Fruit(location, this.addEnergyFunc);
             list.add(fruit);
@@ -190,7 +197,7 @@ public class Flora {
      * @param maxX The maximum x-coordinate of the range.
      * @return A list of all generated game objects.
      */
-    @Override
+   // @Override
     public List<GameObject> createInRangeAndReturn(int minX, int maxX) {
         ArrayList<GameObject> treesArray = new ArrayList<>();
         int normalizedMinX = alignToBlockSize(minX);
@@ -201,11 +208,8 @@ public class Flora {
                 continue; // Skip tree creation at the avatar's position
             }
             if (shouldAddTree()) {
-                int rawHeight = Constants.MIN_TRUNK_HEIGHT +
-                        random.nextInt(Constants.MAX_TRUNK_HEIGHT - Constants.MIN_TRUNK_HEIGHT);
-                int trunkHeight = (rawHeight / Block.SIZE) * Block.SIZE;
-                treesArray.add(createTrunk(x, trunkHeight));
-                treesArray.addAll(createFruitsAndLeaves(x, trunkHeight));
+                treesArray.add(createTrunk(x, Trunk.HEIGHT));
+                treesArray.addAll(createFruitsAndLeaves(x, Trunk.HEIGHT));
             }
         }
 

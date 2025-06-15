@@ -45,7 +45,7 @@ public class Fruit extends GameObject implements JumpObserver {
             new ScheduledTask(this, PepseGameManager.CYCLE_LENGTH, false,
                     () -> this.renderer().setRenderable(new OvalRenderable(Color.YELLOW)));
             ((Avatar)other).addEnergy(FRUIT_ENERGY);
-            this.addEnergyToAvatar.accept(FRUIT_ENERGY);
+            this.addEnergyToAvatar.accept((float) FRUIT_ENERGY);
         }
     }
 

@@ -26,6 +26,7 @@ public class PepseGameManager extends GameManager {
     private static final int ENERGY_COUNTER_SIZE = 50;
     private static final int DISTANCE_FROM_TOP = 10;
 
+    public static float avatarInitialX;
     private WindowController windowController;
     private UserInputListener inputListener;
     private ImageReader imageReader;
@@ -48,6 +49,7 @@ public class PepseGameManager extends GameManager {
         this.windowController = windowController;
         this.inputListener = inputListener;
         this.imageReader = imageReader;
+        avatarInitialX = windowController.getWindowDimensions().x() * DIMENSION_MIDDLE;
 
         createSky();
 
@@ -87,9 +89,8 @@ public class PepseGameManager extends GameManager {
     }
 
     private void createAvatar() {
-        float avatarXCoordinate = windowController.getWindowDimensions().x() * DIMENSION_MIDDLE;
-        this.avatar = new Avatar(new Vector2(avatarXCoordinate,
-                terrain.groundHeightAt(avatarXCoordinate) - Avatar.AVATAR_SIZE),
+        this.avatar = new Avatar(new Vector2(avatarInitialX,
+                terrain.groundHeightAt(avatarInitialX) - Avatar.AVATAR_SIZE),
                 inputListener, imageReader);
         gameObjects().addGameObject(avatar);
     }
@@ -127,6 +128,6 @@ public class PepseGameManager extends GameManager {
         this.flora =
                 new Flora(groundHeightFunc, avatar::registerObserverToJump,
                         avatar::addEnergy, this.gameObjects(), random);
-        flora.createInRange(Constants.MIN_X, (int) windowController.getWindowDimensions().x());
+        flora.createInRange(0, (int) windowController.getWindowDimensions().x());
     }
 }
