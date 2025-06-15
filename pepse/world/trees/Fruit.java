@@ -13,10 +13,9 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 public class Fruit extends GameObject implements JumpObserver {
-    private static final String FRUIT_TAG = "fruit";
+    public static final String FRUIT_TAG = "fruit";
     private static final int FRUIT_ENERGY = 10;
-
-    private final Consumer<Integer> addEnergyToAvatar;
+    private final Consumer<Float> addEnergyToAvatar;
 
     /**
      * Construct a new GameObject instance.
@@ -24,7 +23,7 @@ public class Fruit extends GameObject implements JumpObserver {
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.
      */
-    public Fruit(Vector2 topLeftCorner, Consumer<Integer> addEnergyToAvatar) {
+    public Fruit(Vector2 topLeftCorner, Consumer<Float> addEnergyToAvatar) {
         super(topLeftCorner, Vector2.ONES.mult(Leaf.SIZE), new OvalRenderable(Color.YELLOW));
         this.addEnergyToAvatar = addEnergyToAvatar;
         setTag(FRUIT_TAG);

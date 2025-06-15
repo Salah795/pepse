@@ -13,15 +13,16 @@ import java.util.Random;
 public class Leaf extends GameObject implements JumpObserver {
     //TODO return here again and try to change the implementation here because you have been cheated this.
     public static final int SIZE = 20;
+    public static final float LEAVES_TRANSITION_START = 90;
+    public static final float LEAVES_TRANSITION_END = 0;
+    public static final Color COLOR = new Color(50, 200, 30);
+    public static final String LEAF_TAG = "leaf";
     private static final float VELOCITY_ANGLE = 12;
     private static final float TRANSITION_TIME = 2;
     private static final float MIN_PORTION = 0.5f;
     private static final float MAX_PORTION = 1.5f;
     private static final float DELAY_FACTOR = 0.1f;
     private static final int DELAY_TIME = 30;
-    private static final String LEAF_TAG = "leaf";
-    public static final float LEAVES_TRANSITION_START = 90;
-    public static final float LEAVES_TRANSITION_END = 0;
 
     /**
      * Construct a new GameObject instance.
@@ -30,7 +31,7 @@ public class Leaf extends GameObject implements JumpObserver {
      *                      Note that (0,0) is the top-left corner of the window.
      */
     public Leaf(Vector2 topLeftCorner) {
-        super(topLeftCorner, Vector2.ONES.mult(SIZE), new RectangleRenderable(Color.GREEN));
+        super(topLeftCorner, Vector2.ONES.mult(SIZE), new RectangleRenderable(COLOR));
         Random random = new Random();
         float delayTime = random.nextInt(DELAY_TIME) * DELAY_FACTOR;
         new ScheduledTask(this, delayTime, false, this::createTransition);

@@ -13,8 +13,11 @@ import pepse.world.*;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
+import pepse.world.trees.Flora;
 
 import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
 
 public class PepseGameManager extends GameManager {
     public static final float DIMENSION_MIDDLE = 0.5f;
@@ -29,6 +32,8 @@ public class PepseGameManager extends GameManager {
     private Terrain terrain;
     private GameObject sun;
     private Avatar avatar;
+    private Flora flora;
+    private final Random random = new Random();
 
     public static void main(String[] args) {
         new PepseGameManager().run();
@@ -57,6 +62,8 @@ public class PepseGameManager extends GameManager {
         createAvatar();
 
         createEnergyCounter();
+
+        createTrees(this.avatar);
 
     }
 
@@ -106,5 +113,20 @@ public class PepseGameManager extends GameManager {
     private void createSunHalo() {
         GameObject sunHalo = SunHalo.create(this.sun);
         gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
+    }
+
+    /**
+     * Creates trees and their associated components (leaves, fruits, etc.).
+     *
+     * @param avatar The avatar interacting with the trees.
+     */
+    private void createTrees(Avatar avatar) {
+        Function<Float, Float> groundHeightFunc =
+                x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE)
+                        * Block.SIZE;
+        this.flora =
+                new Flora(groundHeightFunc, avatar::registerObserverToJump,
+                        avatar::addEnergy, this.gameObjects(), random);
+        flora.createInRange(Constants.MIN_X, (int) windowController.getWindowDimensions().x());
     }
 }

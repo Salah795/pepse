@@ -95,7 +95,7 @@ public class Avatar extends GameObject {
         this.jumpObservers.add(jumpObserver);
     }
 
-    public void jumpAvatar() {
+    private void jumpAvatar() {
         transform().setVelocityY(VELOCITY_Y);
         this.avatarEnergy -= JUMP_STATE_MODIFIER;
         renderer().setRenderable(jumpRenderables);
