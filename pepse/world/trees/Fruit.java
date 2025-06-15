@@ -4,17 +4,19 @@ import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.components.ScheduledTask;
 import danogl.gui.rendering.OvalRenderable;
-import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.PepseGameManager;
 import pepse.world.Avatar;
 import pepse.world.JumpObserver;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Fruit extends GameObject implements JumpObserver {
     private static final String FRUIT_TAG = "fruit";
     private static final int FRUIT_ENERGY = 10;
+
+    private final Consumer<Integer> addEnergyToAvatar;
 
     /**
      * Construct a new GameObject instance.
@@ -22,8 +24,9 @@ public class Fruit extends GameObject implements JumpObserver {
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.
      */
-    public Fruit(Vector2 topLeftCorner) {
+    public Fruit(Vector2 topLeftCorner, Consumer<Integer> addEnergyToAvatar) {
         super(topLeftCorner, Vector2.ONES.mult(Leaf.SIZE), new OvalRenderable(Color.YELLOW));
+        this.addEnergyToAvatar = addEnergyToAvatar;
         setTag(FRUIT_TAG);
     }
 
@@ -43,11 +46,15 @@ public class Fruit extends GameObject implements JumpObserver {
             new ScheduledTask(this, PepseGameManager.CYCLE_LENGTH, false,
                     () -> this.renderer().setRenderable(new OvalRenderable(Color.YELLOW)));
             ((Avatar)other).addEnergy(FRUIT_ENERGY);
+            this.addEnergyToAvatar.accept(FRUIT_ENERGY);
         }
     }
 
     @Override
     public void updateForJump() {
-
+        //TODO check this method.
+        if (renderer().getRenderable() != null) {
+            this.renderer().setRenderable(new OvalRenderable(Color.YELLOW));
+        }
     }
 }
