@@ -116,18 +116,10 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
     }
 
-    /**
-     * Creates trees and their associated components (leaves, fruits, etc.).
-     *
-     * @param avatar The avatar interacting with the trees.
-     */
     private void createTrees(Avatar avatar) {
-        //TODO fix this method because you have been copied it.
-        Function<Float, Float> groundHeightFunc =
-                x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE)
-                        * Block.SIZE;
-        this.flora =
-                new Flora(groundHeightFunc, avatar::registerObserverToJump,
+        Function<Float, Float> groundHeightFunction =
+                x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE) * Block.SIZE;
+        this.flora = new Flora(groundHeightFunction, avatar::registerObserverToJump,
                         avatar::addEnergy, this.gameObjects(), random);
         flora.createInRange(0, (int) windowController.getWindowDimensions().x());
     }

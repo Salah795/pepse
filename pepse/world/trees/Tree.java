@@ -1,12 +1,11 @@
 package pepse.world.trees;
 
-import danogl.GameObject;
+import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.util.Vector2;
 import pepse.world.Block;
 import pepse.world.JumpObserver;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
@@ -15,30 +14,28 @@ public class Tree {
     private static final double LEAVES_PROBABILITY = 0.2f;
 
     private final Consumer<JumpObserver> jumpObserverConsumer;
+    private final GameObjectCollection gameObjects;
     private final Consumer<Float> addEnergy;
     private final Vector2 position;
-    private final List<Fruit> fruitsList;
-    private final List<Leaf> leavesList;
     private final Random random;
-    private Trunk trunk;
 
     public Tree(Vector2 position, Consumer<JumpObserver> jumpObserverConsumer, Random random,
-                Consumer<Float> addEnergy) {
+                GameObjectCollection gameObjects, Consumer<Float> addEnergy) {
         this.jumpObserverConsumer = jumpObserverConsumer;
-        this.fruitsList = new ArrayList<>();
-        this.leavesList = new ArrayList<>();
         this.addEnergy = addEnergy;
         this.random = random;
         this.position = position;
+        this.gameObjects = gameObjects;
         createTrunk();
-        createFruits();
         createLeaves();
+        createFruits();
     }
 
     private void createTrunk() {
         Vector2 trunkTopLeftCorner = position.add(new Vector2(0, -Trunk.HEIGHT));
-        this.trunk = new Trunk(trunkTopLeftCorner);
-        this.jumpObserverConsumer.accept(this.trunk);
+        Trunk trunk = new Trunk(trunkTopLeftCorner);
+        this.jumpObserverConsumer.accept(trunk);
+        this.gameObjects.addGameObject(trunk, Layer.STATIC_OBJECTS);
     }
 
     private void createFruits() {
@@ -49,9 +46,9 @@ public class Tree {
                  column <= this.position.y() + Leaf.SIZE;
                  column += Leaf.SIZE) {
                 if (random.nextFloat() >= FRUIT_PROBABILITY) {
-                    Vector2 location = new Vector2(row, position.y() - (column + Leaf.SIZE));
+                    Vector2 location = new Vector2(row, position.y() - Trunk.HEIGHT);
                     Fruit fruit = new Fruit(location, this.addEnergy);
-                    fruitsList.add(fruit);
+                    this.gameObjects.addGameObject(fruit);
                     jumpObserverConsumer.accept(fruit);
                 }
             }
@@ -66,9 +63,9 @@ public class Tree {
             column <= this.position.y() + Leaf.SIZE;
             column += Leaf.SIZE) {
                 if (random.nextFloat() >= LEAVES_PROBABILITY) {
-                    Vector2 location = new Vector2(row, position.y() - (column + Leaf.SIZE));
+                    Vector2 location = new Vector2(row, position.y() - Trunk.HEIGHT);
                     Leaf leaf = new Leaf(location);
-                    leavesList.add(leaf);
+                    this.gameObjects.addGameObject(leaf);
                     jumpObserverConsumer.accept(leaf);
                 }
             }
