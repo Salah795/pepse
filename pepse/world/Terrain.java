@@ -12,7 +12,6 @@ public class Terrain {
     public static final float TERRAIN_FACTOR = (float) 2 / 3;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
-    private static final String GROUND_TAG = "ground";
 
     private float groundHeightAtX0;
     private Vector2 windowDimensions;
@@ -34,7 +33,6 @@ public class Terrain {
             int height = modifyEdge(groundHeightAt(x));
             for (int counter = 0; counter < TERRAIN_DEPTH; counter++) {
                 Block block = new Block(new Vector2(x, height), blockRenderable);
-                block.setTag(GROUND_TAG);
                 blocks.add(block);
                 height += Block.SIZE;
             }

@@ -7,14 +7,19 @@ import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
+import danogl.gui.rendering.Camera;
+import danogl.gui.rendering.RectangleRenderable;
+import danogl.gui.rendering.Renderable;
 import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
+import pepse.util.ColorSupplier;
 import pepse.world.*;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Flora;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -65,7 +70,7 @@ public class PepseGameManager extends GameManager {
 
         createEnergyCounter();
 
-        createTrees(this.avatar);
+        createTrees();
 
     }
 
@@ -89,10 +94,16 @@ public class PepseGameManager extends GameManager {
     }
 
     private void createAvatar() {
-        this.avatar = new Avatar(new Vector2(avatarInitialX,
-                terrain.groundHeightAt(avatarInitialX) - Avatar.AVATAR_SIZE),
+        Vector2 avatarInitialPosition = new Vector2(avatarInitialX,
+                terrain.groundHeightAt(avatarInitialX) - Avatar.AVATAR_SIZE);
+        this.avatar = new Avatar(avatarInitialPosition,
                 inputListener, imageReader);
         gameObjects().addGameObject(avatar);
+        Vector2 vector = this.windowController.getWindowDimensions().mult(0.5f).add(
+                avatarInitialPosition.mult(-1));
+        this.setCamera(new Camera(this.avatar, vector,
+                this.windowController.getWindowDimensions(),
+                this.windowController.getWindowDimensions()));
     }
 
     private void createEnergyCounter() {
@@ -116,11 +127,11 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
     }
 
-    private void createTrees(Avatar avatar) {
+    private void createTrees() {
         Function<Float, Float> groundHeightFunction =
                 x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE) * Block.SIZE;
-        this.flora = new Flora(groundHeightFunction, avatar::registerObserverToJump,
-                        avatar::addEnergy, this.gameObjects(), random);
+        this.flora = new Flora(groundHeightFunction, this.avatar::registerObserverToJump,
+                this.avatar::addEnergy, this.gameObjects(), random);
         flora.createInRange(0, (int) windowController.getWindowDimensions().x());
     }
 }

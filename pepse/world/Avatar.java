@@ -1,6 +1,7 @@
 package pepse.world;
 
 import danogl.GameObject;
+import danogl.collisions.Collision;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.AnimationRenderable;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Avatar extends GameObject {
-    //TODO implement the point 6.7
     public static final String AVATAR_TAG = "avatar";
     public static final int AVATAR_SIZE = 50;
     public static final float AVATAR_INITIAL_ENERGY = 100;
