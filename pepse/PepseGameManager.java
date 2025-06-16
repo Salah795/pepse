@@ -122,6 +122,7 @@ public class PepseGameManager extends GameManager {
      * @param avatar The avatar interacting with the trees.
      */
     private void createTrees(Avatar avatar) {
+        //TODO fix this method because you have been copied it.
         Function<Float, Float> groundHeightFunc =
                 x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE)
                         * Block.SIZE;

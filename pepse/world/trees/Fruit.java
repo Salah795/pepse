@@ -15,7 +15,9 @@ import java.util.function.Consumer;
 public class Fruit extends GameObject implements JumpObserver {
     public static final String FRUIT_TAG = "fruit";
     private static final int FRUIT_ENERGY = 10;
+
     private final Consumer<Float> addEnergyToAvatar;
+    private final OvalRenderable renderable;
 
     /**
      * Construct a new GameObject instance.
@@ -26,24 +28,17 @@ public class Fruit extends GameObject implements JumpObserver {
     public Fruit(Vector2 topLeftCorner, Consumer<Float> addEnergyToAvatar) {
         super(topLeftCorner, Vector2.ONES.mult(Leaf.SIZE), new OvalRenderable(Color.YELLOW));
         this.addEnergyToAvatar = addEnergyToAvatar;
+        this.renderable = new OvalRenderable(Color.YELLOW);
         setTag(FRUIT_TAG);
     }
 
-    /**
-     * Handles collision logic when the fruit interacts with another object.
-     * If the object is the avatar, the fruit disappears temporarily and adds energy to the avatar.
-     *
-     * @param other     The other GameObject involved in the collision.
-     * @param collision The collision details.
-     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
-        //TODO fix this method because you have been copied it.
         super.onCollisionEnter(other, collision);
         if (other.getTag().equals(Avatar.AVATAR_TAG) && renderer().getRenderable() != null) {
             this.renderer().setRenderable(null);
             new ScheduledTask(this, PepseGameManager.CYCLE_LENGTH, false,
-                    () -> this.renderer().setRenderable(new OvalRenderable(Color.YELLOW)));
+                    () -> this.renderer().setRenderable(renderable));
             ((Avatar)other).addEnergy(FRUIT_ENERGY);
             this.addEnergyToAvatar.accept((float) FRUIT_ENERGY);
         }
@@ -51,9 +46,8 @@ public class Fruit extends GameObject implements JumpObserver {
 
     @Override
     public void updateForJump() {
-        //TODO check this method.
         if (renderer().getRenderable() != null) {
-            this.renderer().setRenderable(new OvalRenderable(Color.YELLOW));
+            this.renderer().setRenderable(renderable);
         }
     }
 }

@@ -56,7 +56,8 @@ public class Avatar extends GameObject {
     }
 
     public void addEnergy(float energy) {
-        this.avatarEnergy += energy;
+        if(this.avatarEnergy + energy <= AVATAR_INITIAL_ENERGY)
+            this.avatarEnergy += energy;
     }
 
     public int getEnergy() {
