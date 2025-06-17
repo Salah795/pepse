@@ -14,6 +14,7 @@ import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
 import pepse.world.*;
+import pepse.world.daynight.Cloud;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
@@ -25,6 +26,8 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class PepseGameManager extends GameManager {
+    public static final Color BASE_CLOUD_COLOR = new Color(255, 255, 255);
+    public static final Vector2 CLOUD_INITIAL_POSITION = new Vector2(100, 50);
     public static final float DIMENSION_MIDDLE = 0.5f;
     public static final int CYCLE_LENGTH = 30;
     private static final int TERRAIN_MIN_RANGE = 0;
@@ -72,6 +75,7 @@ public class PepseGameManager extends GameManager {
 
         createTrees();
 
+        createClouds();
     }
 
     private void createSky() {
@@ -133,5 +137,13 @@ public class PepseGameManager extends GameManager {
         this.flora = new Flora(groundHeightFunction, this.avatar::registerObserverToJump,
                 this.avatar::addEnergy, this.gameObjects(), random);
         flora.createInRange(0, (int) windowController.getWindowDimensions().x());
+    }
+
+    private void createClouds() {
+        Vector2 cloudSize = Vector2.ONES.mult(Block.SIZE);
+        Renderable cloudBlockRenderable =
+                new RectangleRenderable(ColorSupplier.approximateMonoColor(BASE_CLOUD_COLOR));
+        new Cloud(CLOUD_INITIAL_POSITION, cloudSize, cloudBlockRenderable,
+                gameObjects(), Layer.BACKGROUND, this.windowController.getWindowDimensions());
     }
 }
