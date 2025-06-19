@@ -144,8 +144,8 @@ public class PepseGameManager extends GameManager {
     }
 
     private void createTrees() {
-        Function<Float, Float> groundHeightFunction =
-                x -> (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE) * Block.SIZE;
+        Function<Float, Float> groundHeightFunction = x -> (float) Math.floor(
+                terrain.groundHeightAt(x) / Block.SIZE) * Block.SIZE;
         this.flora = new Flora(groundHeightFunction, this.avatar::registerObserverToJump,
                 this.avatar::addEnergy, this.gameObjects(), random);
         flora.createInRange(0, (int) windowController.getWindowDimensions().x());
