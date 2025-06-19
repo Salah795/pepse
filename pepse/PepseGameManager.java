@@ -152,8 +152,8 @@ public class PepseGameManager extends GameManager {
     }
 
     private void createClouds() {
-        Renderable cloudBlockRenderable =
-                new RectangleRenderable(ColorSupplier.approximateMonoColor(BASE_CLOUD_COLOR));
+        Renderable cloudBlockRenderable = new RectangleRenderable(
+                ColorSupplier.approximateMonoColor(BASE_CLOUD_COLOR));
         List<Block> cloudBlocksArray = new ArrayList<>();
         for (int row = 0; row < CLOUD_STRUCTURE.size(); row++) {
             for (int column = 0; column < CLOUD_STRUCTURE.get(row).size(); column++) {
