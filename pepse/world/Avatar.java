@@ -1,7 +1,6 @@
 package pepse.world;
 
 import danogl.GameObject;
-import danogl.collisions.Collision;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.AnimationRenderable;
