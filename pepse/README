@@ -1,0 +1,29 @@
+salah.taher,kaissora13
+212001432,214472490
+
+Tree – The main class representing an entire tree. It creates and
+organizes the trunk, leaves, and fruits at a given position.
+Trunk – Represents the tree’s trunk. It is a static object that does
+not respond to interactions but serves as the physical and visual base of the tree.
+Leaf – Represents a tree leaf. It animates (oscillates in size and rotation) and
+reacts to the avatar’s jumps.
+Fruit – Represents a fruit on the tree. When the avatar touches it, it disappears
+temporarily, restores energy to the avatar, and reappears later.
+Flora – Responsible for generating multiple trees over a specified range. It uses
+Tree objects to populate the environment.
+JumpObserver – An interface implemented by any object that wants to respond to the
+avatar’s jump (e.g., leaves, fruits).
+The Tree class creates and manages instances of Trunk, Leaf, and Fruit.
+Both Leaf and Fruit implement the JumpObserver interface to allow them to react when
+ the avatar jumps.
+The Flora class uses a ground height function to determine where to place trees
+and invokes Tree to create them.
+The avatar registers JumpObserver instances using a callback, allowing all leaves
+and fruits to receive updates on jumps.
+Yes, the implementation uses several design principles and patterns:
+Observer Pattern – Implemented via the JumpObserver interface. The avatar acts as a
+subject that notifies registered observers (e.g., leaves, fruits) on jump events.
+Factory-Like Composition – Tree acts as a factory/composer, creating and assembling
+parts (trunk, leaves, fruits) into a single tree structure.
+Dependency Injection – Flora receives behavior (e.g., how to add energy or handle jumps)
+via consumers and functions passed in its constructor, promoting flexibility and separation of concerns.
