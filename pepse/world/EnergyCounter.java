@@ -11,8 +11,9 @@ import java.util.function.Supplier;
  * The {@code EnergyCounter} class displays the current energy level of the avatar
  * as a percentage on the game screen. It updates in real-time using a provided
  * {@link Supplier} that returns the avatar’s energy level.
- *
+ * <p>
  * The text is rendered in screen space (camera coordinates), making it behave like a UI element.
+ * @author Salah Mahmied, Kais Sora.
  */
 public class EnergyCounter extends GameObject {
     /** Symbol appended to the energy value (e.g., "85%"). */
