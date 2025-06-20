@@ -13,6 +13,7 @@ import java.awt.*;
 /**
  * The {@code Sun} class creates a sun GameObject that moves in a circular path
  * across the sky to simulate the sun's movement during a day-night cycle.
+ * @author Salah Mahmied, Kais Sora.
  */
 public class Sun {
     /** The radius (size) of the sun. */
